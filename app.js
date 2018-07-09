@@ -29,8 +29,6 @@ if (os.platform() === 'android') {
 	  app.use(express.static(path.join(__dirname, 'public')));
 }
 
-const work = require('./work')
-
 app.use('/', indexRouter);
 app.use('/ws',workRouter);
 app.use('/users', usersRouter);

@@ -2,6 +2,7 @@
   "name": "express-test",
   "version": "0.0.0",
   "private": true,
+  "repository:":"https://github.com/fastcoding/Example-LiquidCore-Issue.git",
   "scripts": {
     "start": "node ./bin/www",
     "build-cli": "browserify -d -o public/js/index.js client/index.js",
@@ -9,7 +10,7 @@
     "install-svr": "npm run build-svr && fsbin copy server.js TestLiquidCore/app/src/main/res/raw/server.js",
     "install-cli": "npm run build-cli && ( fsbin emptyDir dist/web; fsbin ensureDir dist/web/public ;fsbin ensureDir dist/web/views; fsbin copy public dist/web/public ; fsbin copy views dist/web/views; dtz -o TestLiquidCore/app/src/main/assets/web.zip dist/web )",
     "install": "npm run install-svr && npm run install-cli",
-		"android": "cd testLiquidCore;gradlew assemblyRelease"
+		"android": "cd testLiquidCore;./gradlew installDebug"
 
   },
   "dependencies": {
