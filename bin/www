@@ -1,0 +1,153 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+const os = require('os')
+const _ = require('underscore')
+var app = require('../app');
+var work = require('../work')
+var debug = require('debug')('server');
+var http = require('http');
+let nics = os.networkInterfaces()
+let wlan0Ip = ''
+
+console.log('available network interface addresses:')
+
+let f = function(nic) {
+    return (x) => {
+        if (x.family === 'IPv4') {
+            console.log(nic + ':' + x.address)
+            if (nic === 'wlan0') {
+                wlan0Ip = x.address
+            }
+        }
+    }
+}
+
+for (let nn in nics) {
+    let e = nics[nn]
+    let nic = nn
+    _.each(e, f(nic))
+}
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+var server = null
+var live_time = 0
+var hb_timer=null
+var work_timer=null
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+let listen_params = [
+    {port},
+		onListening
+]
+
+if (os.platform() === 'android') {
+    LiquidCore.on('stopServer', () => {
+        console.log('webserver stopped')
+        server.unref()
+        server = null
+        if (hb_timer) clearInterval(hb_timer)
+				if (work_timer) clearInterval(work_timer)
+    })
+    LiquidCore.on('startServer', () => {
+        if (!server) {
+            server = app.listen.apply(app, listen_params)
+						 server.on('error', onError);
+        }
+		})
+    LiquidCore.emit('ready', {
+        wlan0: wlan0Ip,
+        port: port
+    })
+} else {
+		server=app.listen.apply(app,listen_params);
+		server.on('error', onError);
+}
+
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  console.log('Listening on ' + bind);
+  
+	hb_timer = setInterval(() => {
+	live_time += 1
+	if (typeof global.gc == 'function' && live_time % 21 == 0) {
+			global.gc()
+			    	console.warn('manual gc called!')
+  }
+  let { heapUsed, heapTotal } = process.memoryUsage()
+  let heapPercent = heapUsed / heapTotal
+
+  let percent = heapUsed * 100 / heapTotal
+  console.log("after "+live_time+" seconds,"," heap usage:" + heapUsed + "/" + heapTotal + "(" + percent.toFixed(2) + "%)")
+	}, 1000)
+
+	work_timer=setInterval(()=>{
+				work.broadcast_pic()
+	},100)
+}
