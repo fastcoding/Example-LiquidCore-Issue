@@ -24,3 +24,13 @@ The main function involved is at MainActivity.java#38.
 
 
 - open Android Studio, open TestLiquidCore subdirectory, click run and notice the Logcat report about current heap usage.
+
+##Screen Shots
+
+- Testing on an old Pad
+
+  ![SS1](screenshot/s1.jpg)
+
+- Testing on HUWEI P9
+
+  ![SS2](screenshot/s2.jpg)
