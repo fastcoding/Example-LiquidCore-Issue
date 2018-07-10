@@ -29,8 +29,8 @@ The main function involved is at MainActivity.java#38.
 
 - Testing on an old Pad
 
-  ![SS1](screenshot/s1.jpg)
+  ![SS1](https://raw.githubusercontent.com/fastcoding/Example-LiquidCore-Issue/master/screenshot/s1.png)
 
 - Testing on HUWEI P9
 
-  ![SS2](screenshot/s2.jpg)
+  ![SS2](https://raw.githubusercontent.com/fastcoding/Example-LiquidCore-Issue/master/screenshot/s2.png)
