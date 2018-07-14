@@ -18,6 +18,11 @@ The main function involved is at MainActivity.java#38.
                    }
 
 ## Build Steps
+
+- check out submodules
+
+        git pull --recurse-submodules 
+
 - install node modules. on the project root directory, issue the command.
 
         npm install
