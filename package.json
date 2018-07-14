@@ -9,7 +9,8 @@
     "build-svr": "browserify --node -o server.js bin/www",
     "install-svr": "npm run build-svr && fsbin copy server.js TestLiquidCore/app/src/main/res/raw/server.js",
     "install-cli": "npm run build-cli && ( fsbin emptyDir dist/web; fsbin ensureDir dist/web/public ;fsbin ensureDir dist/web/views; fsbin copy public dist/web/public ; fsbin copy views dist/web/views; dtz -o TestLiquidCore/app/src/main/assets/web.zip dist/web )",
-    "install": "npm run install-svr && npm run install-cli",
+		"link-lqc": "fsbin ensureSymlinkSync $PWD/LiquidCore/LiquidCoreAndroid TestLiquidCore/LiquidCoreAndroid && fsbin ensureSymlinkSync $PWD/LiquidCore/deps TestLiquidCore/deps",
+    "install": "npm run link-lqc && npm run install-svr && npm run install-cli",
     "android": "cd testLiquidCore;./gradlew installDebug"
   },
   "dependencies": {

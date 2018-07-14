@@ -1,0 +1,3 @@
+[submodule "LiquidCore"]
+	path = LiquidCore
+	url = https://github.com/fastcoding/LiquidCore.git
