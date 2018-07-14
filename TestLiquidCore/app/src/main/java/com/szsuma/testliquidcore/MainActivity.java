@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     JSFunction jsf_get_pic = null;
     ArrayList<String> picfiles=new ArrayList<String>();
     int idx=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
         webServer.setOnServerReady(new Runnable() {
             @Override
             public void run() {
+                for (File file : new File(webServer.getWebDir()+"/public/images").listFiles()) {
+                    picfiles.add(file.getPath());
+                    Log.i(TAG,"added pic:"+file.getPath());
+                }
                 String url=webServer.getUri();
                 setTitle(url);
                 Log.i(TAG,"start webview:"+url);
@@ -59,15 +64,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (File file : new File(webServer.getWebDir()+"/public/images").listFiles()) {
-                            picfiles.add(file.getPath());
-                            Log.i(TAG,"added pic:"+file.getPath());
-                        }
-                    }
-                }).start();
             }
         });
 

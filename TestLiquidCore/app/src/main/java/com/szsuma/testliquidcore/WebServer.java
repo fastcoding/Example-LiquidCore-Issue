@@ -45,16 +45,26 @@ public class WebServer {
     }
     private String ipAddress="";
     private int port=0;
+    private Thread webroot_thread=null;
     public Runnable getOnServerReady() {
         return OnServerReady;
     }
 
     public void setOnServerReady(Runnable onServerReady) {
+        if (webroot_thread!=null){
+            try {
+                webroot_thread.join();
+                webroot_thread=null;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         OnServerReady = onServerReady;
     }
 
     static final int unzipBUFFER = 2048;
     private void fireServerStarted(){
+
         mService.emit("startServer",true);
         if (OnServerReady!=null){
             new android.os.Handler(Looper.getMainLooper()).post(OnServerReady);
@@ -183,7 +193,7 @@ public class WebServer {
         }else{
             webDir.mkdir();
         }
-        new Thread(new Runnable() {
+        webroot_thread=new Thread(new Runnable() {
             @Override
             public void run() {
                 InputStream zipstream = null;
@@ -209,7 +219,8 @@ public class WebServer {
                 fireServerStarted();
 
             }
-        }).start();
+        });
+        webroot_thread.start();
         return;
     }
 

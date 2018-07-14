@@ -10,9 +10,14 @@ function getWsAbsoluteUrl(relative) {
 }
 $(()=>{
 	wsrpc(ws)
-	ws.on('update_pic',(data)=>{
+	ws.on('update_pic',(data,cb)=>{
 		console.log('got picture')
-		$('#mypic').attr('src',data)
+    try{
+		    $('#mypic').attr('src',data)
+        cb(null,true)
+    }catch(e){
+        cb(e,false)
+    }
 	})
 	ws.on('error',(msg)=>{
   	 console.warn(msg)
@@ -27,4 +32,3 @@ $(()=>{
 	})
 	}
 )
-

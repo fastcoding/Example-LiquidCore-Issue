@@ -31,8 +31,6 @@ if (os.platform() === 'android') {
 	  app.use(express.static(path.join(__dirname, 'public')));
 }
 
-const work = require('./work')
-
 app.use('/', indexRouter);
 app.use('/ws',workRouter);
 app.use('/users', usersRouter);
@@ -55,8 +53,8 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-}).call(this,"/Users/zhanghx/temp/express_test")
-},{"./routes/index":537,"./routes/users":538,"./routes/work":539,"./work":540,"cookie-parser":121,"express":238,"express-ws":221,"http-errors":263,"morgan":430,"os":undefined,"path":undefined,"pug":474}],2:[function(require,module,exports){
+}).call(this,"/Users/zhanghx/temp/Example-LiquidCore-Issue")
+},{"./routes/index":537,"./routes/users":538,"./routes/work":539,"cookie-parser":121,"express":238,"express-ws":221,"http-errors":263,"morgan":430,"os":undefined,"path":undefined,"pug":474}],2:[function(require,module,exports){
 
 
 /**
@@ -195,7 +193,7 @@ function onListening() {
   
 	hb_timer = setInterval(() => {
 	live_time += 1
-	if (typeof global.gc == 'function' && live_time % 21 == 0) {
+	if (typeof global.gc == 'function' && live_time % 11 == 0) {
 			global.gc()
 			    	console.warn('manual gc called!')
   }
@@ -8385,7 +8383,7 @@ function amdefine(module, requireFn) {
 
 module.exports = amdefine;
 
-}).call(this,"/Users/zhanghx/temp/express_test/node_modules/amdefine/amdefine.js")
+}).call(this,"/Users/zhanghx/temp/Example-LiquidCore-Issue/node_modules/amdefine/amdefine.js")
 },{"path":undefined}],11:[function(require,module,exports){
 'use strict'
 
@@ -21382,7 +21380,7 @@ try {
   module.exports = require('./fallback');
 }
 
-}).call(this,"/Users/zhanghx/temp/express_test/node_modules/bufferutil")
+}).call(this,"/Users/zhanghx/temp/Example-LiquidCore-Issue/node_modules/bufferutil")
 },{"./fallback":51,"node-gyp-build":437}],53:[function(require,module,exports){
 /*!
  * bytes
@@ -34333,10 +34331,8 @@ module.exports = function (ws) {
 		};
 		//console.log('requesting: ', req);
 		ws.send(new Buffer(JSON.stringify(req)));
-		//ws.send(JSON.stringify(req));
 	};
 };
-
 },{}],221:[function(require,module,exports){
 module.exports = require("./lib").default;
 
@@ -93107,7 +93103,7 @@ try {
   module.exports = require('./fallback');
 }
 
-}).call(this,"/Users/zhanghx/temp/express_test/node_modules/utf-8-validate")
+}).call(this,"/Users/zhanghx/temp/Example-LiquidCore-Issue/node_modules/utf-8-validate")
 },{"./fallback":529,"node-gyp-build":437}],531:[function(require,module,exports){
 /**
  * @fileoverview Extend node util module
@@ -93721,13 +93717,17 @@ function send_pic(ws){
 		 if (os.platform()==='android'){
 				 let picstr=android_fetch_pic()
 				 if (picstr){
-				 		ws.call('update_pic','data:image/jpg;base64,'+picstr,function(err,ret){})
+				 		ws.call('update_pic','data:image/jpg;base64,'+picstr,function(err,ret){
+							if (err){
+								console.log("error occurs at browser:"+err)
+							}
+						})
 				 }
 		 }else{
 		 		if (idx>=pics.length){
 					return
      		}
-		
+
 			 let fn=pics[idx]
 			 base64Img.base64(fn, (err, data) => {
                 if (err) {
@@ -93745,7 +93745,7 @@ function send_pic(ws){
 
 function broadcast_pic(){
 		_.each(wsarr,(ws)=>{
-			send_pic(ws)	
+			send_pic(ws)
     })
 		idx++
 		if (idx>=pics.length){
@@ -93760,6 +93760,5 @@ module.exports={
 	broadcast_pic,
 	ws_count
 }
-
 
 },{"base64-img":42,"glob":260,"os":undefined,"underscore":527}]},{},[2]);

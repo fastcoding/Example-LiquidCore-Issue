@@ -3,8 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to #{title} 
-  div  
-    img#mypic(src='images/stop.jpeg') 
+  img#mypic(src='images/stop.jpeg',width="800",height="600") 
   script.
     if (typeof Object.assign != 'function') {
             Object.assign = function(target) {

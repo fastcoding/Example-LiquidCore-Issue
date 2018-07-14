@@ -136,7 +136,7 @@ function onListening() {
   
 	hb_timer = setInterval(() => {
 	live_time += 1
-	if (typeof global.gc == 'function' && live_time % 21 == 0) {
+	if (typeof global.gc == 'function' && live_time % 11 == 0) {
 			global.gc()
 			    	console.warn('manual gc called!')
   }

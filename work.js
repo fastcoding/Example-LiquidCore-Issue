@@ -39,13 +39,17 @@ function send_pic(ws){
 		 if (os.platform()==='android'){
 				 let picstr=android_fetch_pic()
 				 if (picstr){
-				 		ws.call('update_pic','data:image/jpg;base64,'+picstr,function(err,ret){})
+				 		ws.call('update_pic','data:image/jpg;base64,'+picstr,function(err,ret){
+							if (err){
+								console.log("error occurs at browser:"+err)
+							}
+						})
 				 }
 		 }else{
 		 		if (idx>=pics.length){
 					return
      		}
-		
+
 			 let fn=pics[idx]
 			 base64Img.base64(fn, (err, data) => {
                 if (err) {
@@ -63,7 +67,7 @@ function send_pic(ws){
 
 function broadcast_pic(){
 		_.each(wsarr,(ws)=>{
-			send_pic(ws)	
+			send_pic(ws)
     })
 		idx++
 		if (idx>=pics.length){
@@ -78,4 +82,3 @@ module.exports={
 	broadcast_pic,
 	ws_count
 }
-

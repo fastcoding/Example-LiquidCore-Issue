@@ -2,16 +2,15 @@
   "name": "express-test",
   "version": "0.0.0",
   "private": true,
-  "repository:":"https://github.com/fastcoding/Example-LiquidCore-Issue.git",
+  "repository:": "https://github.com/fastcoding/Example-LiquidCore-Issue.git",
   "scripts": {
     "start": "node ./bin/www",
-    "build-cli": "browserify -d -o public/js/index.js client/index.js",
+    "build-cli": "browserify -d -t [ babelify --no-sourceMaps ] -o public/js/index.js client/index.js",
     "build-svr": "browserify --node -o server.js bin/www",
     "install-svr": "npm run build-svr && fsbin copy server.js TestLiquidCore/app/src/main/res/raw/server.js",
     "install-cli": "npm run build-cli && ( fsbin emptyDir dist/web; fsbin ensureDir dist/web/public ;fsbin ensureDir dist/web/views; fsbin copy public dist/web/public ; fsbin copy views dist/web/views; dtz -o TestLiquidCore/app/src/main/assets/web.zip dist/web )",
     "install": "npm run install-svr && npm run install-cli",
-		"android": "cd testLiquidCore;./gradlew installDebug"
-
+    "android": "cd testLiquidCore;./gradlew installDebug"
   },
   "dependencies": {
     "base64-img": "^1.0.4",
@@ -32,6 +31,9 @@
     "utf-8-validate": "^5.0.1"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^8.0.0",
     "dtz": "^1.0.2",
     "express-ws-rpc": "0.0.3",
     "fsbin": "^1.0.7"
