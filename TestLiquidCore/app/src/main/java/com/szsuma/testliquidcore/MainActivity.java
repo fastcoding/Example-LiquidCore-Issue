@@ -23,12 +23,26 @@ public class MainActivity extends AppCompatActivity {
     int idx=0;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //webServer.stop();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         webView = (WebView) findViewById(R.id.webview);
+        webView.getSettings().setJavaScriptEnabled(true);
         webServer = new WebServer(getApplicationContext());
-
+        webServer.start();
         webServer.setOnServerReady(new Runnable() {
             @Override
             public void run() {
@@ -39,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 String url=webServer.getUri();
                 setTitle(url);
                 Log.i(TAG,"start webview:"+url);
-                webView.loadUrl(url);
+
                 webServer.getJSContext().property("android_fetch_pic",new JSFunction(webServer.getJSContext(),"fetch_pic") {
                     public String fetch_pic() {
                         if (idx<picfiles.size()){
@@ -63,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
                         return null;
                     }
                 });
-
+                webView.loadUrl(webServer.getUri());
             }
         });
 
 
 
-        webServer.start();
+
         Button btn=(Button)findViewById(R.id.refresh);
         btn.setClickable(true);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -79,4 +93,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
